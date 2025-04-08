@@ -1,3 +1,5 @@
+look at this,all this we do??
+and i need to ask,how number of end point we do in my code:
 # Emporium Order Service
 
 The Order Service is a core backend component of the Emporium platform, responsible for processing book purchase requests. It communicates with the Catalog Service to verify availability and pricing, updates inventory, and logs each transaction to a persistent CSV file.
@@ -23,24 +25,27 @@ The Order Service is a core backend component of the Emporium platform, responsi
 
 1. Clone the repository:
 ```bash
+git clone https://github.com/Emporium-Platform/Emporium-order-service.git
 
 
 ## Installation
 
 1. Clone the repository:
-```
-git clone https://github.com/Emporium-Platform/Emporium-order-service.git
+```bash
+git clone https://github.com/Emporium-Platform/Emporium-gateway-service.git
 ```
 
 2. Install dependencies:
 ```bash
-npm install```
+npm install
+```
 
 3. Start the service:
 ```bash
 
 # Production mode
-npm start```
+npm start
+```
 
 ## Environment Variables
 
