@@ -28,16 +28,20 @@ The Order Service is a core backend component of the Emporium platform, responsi
 ## Installation
 
 1. Clone the repository:
-```bash
-git clone https://github.com/Emporium-Platform/Emporium-order-service.git```
+```
+bash
+git clone https://github.com/Emporium-Platform/Emporium-order-service.git
+```
 
 2. Install dependencies:
-```bash
+```
+bash
 npm install
 ```
 
 3. Start the service:
-```bash
+```
+bash
 
 # Production mode
 npm start
