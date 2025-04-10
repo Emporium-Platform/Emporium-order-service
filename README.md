@@ -1,5 +1,3 @@
-look at this,all this we do??
-and i need to ask,how number of end point we do in my code:
 # Emporium Order Service
 
 The Order Service is a core backend component of the Emporium platform, responsible for processing book purchase requests. It communicates with the Catalog Service to verify availability and pricing, updates inventory, and logs each transaction to a persistent CSV file.
