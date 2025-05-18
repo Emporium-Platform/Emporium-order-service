@@ -1,20 +1,43 @@
 version: '3.8'
 
 services:
-  order:
+  order1:
     build:
       context: .
       dockerfile: Dockerfile
     ports:
       - "4000:4000"
     environment:
+      - PORT=4000
       - CATALOG_SERVICE_URL=http://catalog:5000
       - GATEWAY_SERVICE_URL=http://gateway:3000
+      - REPLICA_URL=http://order2:4000
     networks:
       - emporium-network
+    container_name: order-service-1
     extra_hosts:
       - "catalog:host-gateway"
       - "gateway:host-gateway"
+      - "order2:host-gateway"
+
+  order2:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "4001:4000"
+    environment:
+      - PORT=4000
+      - CATALOG_SERVICE_URL=http://catalog:5000
+      - GATEWAY_SERVICE_URL=http://gateway:3000
+      - REPLICA_URL=http://order1:4000
+    networks:
+      - emporium-network
+    container_name: order-service-2
+    extra_hosts:
+      - "catalog:host-gateway"
+      - "gateway:host-gateway"
+      - "order1:host-gateway"
 
 networks:
   emporium-network:
