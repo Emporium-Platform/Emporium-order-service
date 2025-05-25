@@ -16,6 +16,7 @@ app.get('/health', (req, res) => {
 app.post('/purchase/:itemId', async (req, res) => {
   const itemId = parseInt(req.params.itemId);
   try {
+    // Step 1: Get book info from catalog
     const infoRes = await axios.get(`${CATALOG_URL}/info/${itemId}`);
     const book = infoRes.data;
 
@@ -26,19 +27,36 @@ app.post('/purchase/:itemId', async (req, res) => {
       });
     }
 
+    // Step 2: Decrement quantity
     const newQuantity = book.quantity - 1;
     await axios.put(`${CATALOG_URL}/update/${itemId}`, {
       quantity: newQuantity,
     });
 
-    const logLine = `${new Date().toISOString()},${itemId},"${book.title}",${book.price}\n`;
+    // Step 3: Log locally
+    const timestamp = new Date().toISOString();
+    const logLine = `${timestamp},${itemId},"${book.title}",${book.price}\n`;
     const logPath = path.join(__dirname, 'orders.csv');
     fs.appendFileSync(logPath, logLine);
+
+    // Step 4: Replicate to peer
+    try {
+      await axios.post(config.services.replica + '/replicate', {
+        itemId,
+        title: book.title,
+        price: book.price,
+        timestamp
+      });
+      console.log(`✔️ Replicated to ${config.services.replica}`);
+    } catch (replicationErr) {
+      console.warn(' Replication failed:', replicationErr.message);
+    }
 
     res.json({
       status: 'success',
       message: `bought book ${book.title}`,
     });
+
   } catch (err) {
     console.error('Purchase failed:', err.message);
     res.status(500).json({
@@ -47,6 +65,22 @@ app.post('/purchase/:itemId', async (req, res) => {
     });
   }
 });
+
+
+app.post('/replicate', (req, res) => {
+  const { itemId, title, price, timestamp } = req.body;
+  try {
+    const logLine = `${timestamp},${itemId},"${title}",${price}\n`;
+    const logPath = path.join(__dirname, 'orders.csv');
+    fs.appendFileSync(logPath, logLine);
+
+    res.status(200).json({ status: 'replicated', message: 'Purchase replicated successfully' });
+  } catch (err) {
+    console.error('Replication failed:', err.message);
+    res.status(500).json({ status: 'error', message: 'Failed to replicate purchase' });
+  }
+});
+
 
 const PORT = config.port;
 app.listen(PORT, () => {
