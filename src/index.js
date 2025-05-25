@@ -16,7 +16,6 @@ app.get('/health', (req, res) => {
 app.post('/purchase/:itemId', async (req, res) => {
   const itemId = parseInt(req.params.itemId);
   try {
-    // Step 1: Get book info from catalog
     const infoRes = await axios.get(`${CATALOG_URL}/info/${itemId}`);
     const book = infoRes.data;
 
@@ -27,19 +26,16 @@ app.post('/purchase/:itemId', async (req, res) => {
       });
     }
 
-    // Step 2: Decrement quantity
     const newQuantity = book.quantity - 1;
     await axios.put(`${CATALOG_URL}/update/${itemId}`, {
       quantity: newQuantity,
     });
 
-    // Step 3: Log locally
     const timestamp = new Date().toISOString();
     const logLine = `${timestamp},${itemId},"${book.title}",${book.price}\n`;
     const logPath = path.join(__dirname, 'orders.csv');
     fs.appendFileSync(logPath, logLine);
 
-    // Step 4: Replicate to peer
     try {
       await axios.post(config.services.replica + '/replicate', {
         itemId,
