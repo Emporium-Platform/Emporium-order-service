@@ -1,11 +1,11 @@
 # Emporium Order Service
 
-The Order Service is a core backend component of the Emporium platform, responsible for processing book purchase requests. It communicates with the Catalog Service to verify availability and pricing, updates inventory, and logs each transaction to a persistent CSV file.
-
+The Order Service is a core backend component of the Emporium platform, responsible for processing book purchase requests. It communicates with the Catalog Service to verify availability and pricing, updates inventory, logs each transaction to a persistent CSV file, and supports replication to a secondary order instance.
 ## Features
 
 - Handles book purchase transactions
 - Communicates with the Catalog Service to retrieve and update book info
+- Supports replication between order service instances
 - Logs all purchases to `orders.csv`
 - Health check endpoint
 - Error handling and logging
@@ -14,7 +14,6 @@ The Order Service is a core backend component of the Emporium platform, responsi
 ## Tech Stack
 
 - Node.js
-- Express.js
 - Axios for HTTP requests
 - File system (fs) for purchase logging
 - Docker support
@@ -45,9 +44,11 @@ The service can be configured using the following environment variables:
 
 | Variable | Description | Default |
 |----------|-------------|---------|
-| PORT | Port number for the gateway service | 3000 |
+| PORT | Port number for the order service | 4000 |
 | CATALOG_SERVICE_URL | URL of the catalog service | http://localhost:5000 |
 | GATEWAY_SERVICE_URL | URL of the gateway service | http://localhost:3000 |
+| REPLICA_URL | URL of the other order replica | http://localhost:4001 |
+
 
 ## API Endpoints
 
@@ -80,6 +81,21 @@ Searches for books based on the provided topic.
   "status": "success",
   "message": "bought book <title>"
 }
+```
+### Replicate Purchase
+```
+POST /replicate
+```
+Used internally to replicate a purchase log entry from another order instance.
+
+**Response**:
+```json
+{
+  "status": "replicated",
+  "message": "Purchase replicated successfully"
+}
+
+
 ```
 
 
