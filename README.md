@@ -6,7 +6,6 @@ The Order Service is a core backend component of the Emporium platform, responsi
 - Handles book purchase transactions
 - Communicates with the Catalog Service to retrieve and update book info
 - Supports replication between order service instances
-- Logs all purchases to `orders.csv`
 - Health check endpoint
 - Error handling and logging
 - Docker support
@@ -15,7 +14,6 @@ The Order Service is a core backend component of the Emporium platform, responsi
 
 - Node.js
 - Axios for HTTP requests
-- File system (fs) for purchase logging
 - Docker support
 
 ## Installation
