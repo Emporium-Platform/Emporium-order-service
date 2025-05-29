@@ -1,6 +1,6 @@
 # Emporium Order Service
 
-The Order Service is a core backend component of the Emporium platform, responsible for processing book purchase requests. It communicates with the Catalog Service to verify availability and pricing, updates inventory, logs each transaction to a persistent CSV file, and supports replication to a secondary order instance.
+The Order Service is a core backend component of the Emporium platform, responsible for processing book purchase requests. It communicates with the Catalog Service to verify availability and pricing, updates inventory, and supports replication to a secondary order instance.
 ## Features
 
 - Handles book purchase transactions
